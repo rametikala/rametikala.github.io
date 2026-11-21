@@ -43,13 +43,18 @@ footer{border-top:1px solid var(--rule);padding:24px 0 44px;color:var(--muted);f
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
 <script>
 /* ===== EDIT THIS BLOCK ===== */
-const CFG={owner:"rametikala",branch:"main",name:"Sairam Etikala",
- headline:"Technical product manager for aircraft and spacecraft.",
- intro:"I build products from user need to deployment, and I want them to reach as many people as possible.",
- email:"sairam.etikala.75@gmail.com",linkedin:"https://www.linkedin.com/in/sairam-etikala-hyd/",
- file:"page.md",                         // the markdown file the site reads from every repo
- siteRepo:"rametikala.github.io",         // this website's repo: its page.md is the About page, its blogs/ folder holds posts
- projects:["WaterDischargeLogger"]};      // one project repo per name; add a name only when that repo has a page.md
+const CFG = {
+  owner: "rametikala",
+  branch: "main",
+  name: "Sairam Etikala",
+  headline: "Technical product manager for aircraft and spacecraft.",
+  intro: "I build products from user need to deployment, and I want them to reach as many people as possible.",
+  email: "sairam.etikala.75@gmail.com",
+  linkedin: "https://www.linkedin.com/in/sairam-etikala-hyd/",
+  file: "page.md", // the markdown file the site reads from every repo
+  siteRepo: "rametikala.github.io", // this website's repo: its page.md is the About page, its blogs/ folder holds posts
+  projects: ["WaterDischargeLogger", "MapGenerator"] // one project repo per name; add a name only when that repo has a page.md
+};
 /* ===== END ===== */
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
