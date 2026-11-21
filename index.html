@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Notes | Hardware product projects, documented in public</title>
+<meta name="description" content="Technical product manager portfolio: drone, geospatial and field-hardware projects with requirements, decisions and test data.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="util"><div class="w"><span>Portfolio of Sairam Etiakla, technical product manager</span><span><a href="https://github.com/rametikala">GitHub</a><a href="https://www.linkedin.com/in/sairam-etikala-hyd/">LinkedIn</a><a href="mailto:sairam.etikala.75@gmail.com">Email</a></span></div></div>
+<header class="w"><div class="mast"><a class="logo" href="index.html" aria-label="Field Notes home"><i>/</i>Field Notes</a><span class="tag-line">Hardware projects, documented in public</span></div>
+<nav class="topics" aria-label="Topics"><a href="#">Aerospace</a><a href="#">Geospatial</a><a href="#">Hardware</a><a href="#">Climate Tech</a><a href="#about">About</a></nav></header>
+<main class="w">
+<div class="home"><div id="lead" class="lead"></div><div id="list" class="list"></div></div>
+<section class="band" id="about"><h4>About this site</h4>
+<p>I am a technical product manager. Each project here links to a GitHub repository with the requirements, decisions, test logs and failures behind it. If a number has no log, it is shown as not measured.</p>
+<a class="btn" href="https://github.com/rametikala">See all repositories</a><a class="btn" href="mailto:sairam.etikala.75@gmail.com">Get in touch</a></section>
+</main>
+<footer><div class="w">Static site on GitHub Pages. Dates use ISO or day-month-year, units are SI.</div></footer>
+<script src="projects.js"></script>
+<script>
+const f=PROJECTS.find(p=>p.feature)||PROJECTS[0];
+document.getElementById("lead").innerHTML=`<a href="${href(f)}"><div class="art"><b>${esc(f.status)}</b></div></a>${chips(f)}<h2><a href="${href(f)}">${esc(f.title)}</a></h2><p class="dek">${esc(f.dek)}</p><div class="meta">${fmt(f.date)} · ${esc(f.read)}</div>`;
+document.getElementById("list").innerHTML=PROJECTS.filter(p=>p!==f).map(p=>`<article>${chips(p)}<h3><a href="${href(p)}">${esc(p.title)}</a></h3><p>${esc(p.dek)}</p><div class="meta">${fmt(p.date)} · ${esc(p.read)} · ${esc(p.status)}</div></article>`).join("");
+</script></body></html>
