@@ -49,18 +49,17 @@ h2.sec{font-size:1.5rem;font-weight:800;margin:36px 0 14px;padding-top:10px;bord
 <header class="w"><div class="mast"><a class="logo" href="#/"><i>/</i><span id="brand"></span></a><span class="tl" id="tag"></span></div>
 <nav><a href="#/" data-r="home">Projects</a><a href="#/scorecard" data-r="scorecard">TPM scorecard</a><a href="#/about" data-r="about">About</a></nav></header>
 <main class="w" id="app">Loading...</main>
-<footer><div class="w">Content is read live from each repository's README.md. Static site on GitHub Pages.</div></footer>
+<footer><div class="w">Content is read live from each repository's page.md. Static site on GitHub Pages.</div></footer>
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
 <script>
 /* ===== EDIT THIS BLOCK ===== */
 const CFG={owner:"rametikala",branch:"main",name:"Sairam Etikala",brand:"Field Notes",
  headline:"Technical product manager for drones, mapping and field hardware.",
- tagline:"Every project below is a repository whose README holds the requirements, decisions, tests and costs. Nothing is claimed without evidence.",
  email:"sairam.etikala.75@gmail.com",linkedin:"https://www.linkedin.com/in/sairam-etikala-hyd/",
- aboutRepo:"welcome",                       // repo whose README.md is the About page
+ aboutRepo:"welcome",                       // repo whose page.md is the About page
  projects:["mapping-drone","strike-dip-device","springshed-analysis","wildlife-tracker"]};  // add a repo name to add a project
-/* What a technical PM must show. A tick needs a README heading matching "re" with real text under it. */
+/* What a technical PM must show. A tick needs a page heading matching "re" with real text under it. */
 const COMP=[
  {id:"problem",label:"Customer problem and evidence",re:/problem|customer|user|market|benchmark/i},
  {id:"req",label:"Measurable requirements",re:/requirement|prd|spec/i},
@@ -93,8 +92,8 @@ function parse(repo,md){
   body:h1?body.replace(h1.raw,""):body}}
 async function load(repo){
  if(cache[repo])return cache[repo];
- try{const r=await fetch(RAW(repo,"README.md"));if(!r.ok)throw 0;return cache[repo]=parse(repo,await r.text())}
- catch(e){return cache[repo]={repo,title:repo,dek:"README.md not found, or the repository is private.",topics:[],status:"Missing",date:"",cov:{},body:"",missing:true}}}
+ try{const r=await fetch(RAW(repo,"page.md"));if(!r.ok)throw 0;return cache[repo]=parse(repo,await r.text())}
+ catch(e){return cache[repo]={repo,title:repo,dek:"page.md not found, or the repository is private.",topics:[],status:"Missing",date:"",cov:{},body:"",missing:true}}}
 const count=p=>COMP.filter(c=>p.cov[c.id]).length;
 function chips(p){return`<div class="chips">${p.topics.map(t=>`<span class="chip t">${esc(t)}</span>`).join("")}${p.type?`<span class="chip">${esc(p.type)}</span>`:""}</div>`}
 async function home(){
@@ -111,7 +110,7 @@ const p_link=(p,inner)=>p.missing?inner:`<a href="#/p/${esc(p.repo)}">${inner}</
 async function scorecard(){
  const all=await Promise.all(CFG.projects.map(load));
  $("app").innerHTML=`<section class="hero"><h1>TPM scorecard</h1><p class="lede">What a technical product manager must be able to show, and where each project proves it.</p></section>
- <p class="note">A tick appears only when the project README has a heading on that topic with real text under it. Empty or TODO sections do not count.</p>
+ <p class="note">A tick appears only when the project page has a heading on that topic with real text under it. Empty or TODO sections do not count.</p>
  <div class="t-wrap"><table class="grid"><thead><tr><th>Skill</th>${all.map(p=>`<th>${p.missing?esc(p.title):`<a href="#/p/${esc(p.repo)}">${esc(p.title)}</a>`}</th>`).join("")}</tr></thead><tbody>${COMP.map(c=>`<tr><td>${esc(c.label)}</td>${all.map(p=>`<td class="c">${p.cov[c.id]?'<span class="ok">✓</span>':"—"}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}
 function article(p,extra){
  const d=document.createElement("div");d.innerHTML=DOMPurify.sanitize(marked.parse(p.body));
@@ -119,11 +118,11 @@ function article(p,extra){
  d.querySelectorAll("a").forEach(a=>{const h=a.getAttribute("href")||"";if(h.startsWith("#"))a.removeAttribute("href");else if(!/^(https?:|mailto:)/.test(h))a.href=`https://github.com/${CFG.owner}/${p.repo}/blob/${CFG.branch}/${h.replace(/^\.?\//,"")}`;a.rel="noopener"});
  return`<article class="post">${chips(p)}<h1>${esc(p.title)}</h1><p class="dek">${esc(p.dek)}</p><div class="by"><span>By <strong>${esc(CFG.name)}</strong></span>${p.date?`<span>${esc(p.date)}</span>`:""}${p.status?`<span>Status: <strong class="st">${esc(p.status)}</strong></span>`:""}${extra}</div><div class="body">${d.innerHTML}</div><p style="margin-top:30px"><a class="btn" href="https://github.com/${CFG.owner}/${p.repo}">View repository ↗</a></p></article>`}
 async function project(repo){const p=await load(repo);$("app").innerHTML=p.missing?`<p class="note">${esc(p.dek)}</p>`:article(p,`<span>${count(p)} of ${COMP.length} PM sections</span>`)}
-async function about(){const p=await load(CFG.aboutRepo);$("app").innerHTML=p.missing?`<p class="note">Add a README.md to the ${esc(CFG.aboutRepo)} repo.</p>`:article({...p,topics:["About"]},"")}
+async function about(){const p=await load(CFG.aboutRepo);$("app").innerHTML=p.missing?`<p class="note">Add a page.md to the ${esc(CFG.aboutRepo)} repo.</p>`:article({...p,topics:["About"]},"")}
 async function route(){
  const h=location.hash.replace(/^#\/?/,"").split("/");const r=h[0]==="p"&&CFG.projects.includes(h[1])?"project":h[0]==="scorecard"?"scorecard":h[0]==="about"?"about":"home";
  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.r===(r==="project"?"home":r)));
  $("app").innerHTML="Loading...";scrollTo(0,0);
- try{await({home,scorecard,about,project:()=>project(h[1])}[r])()}catch(e){$("app").textContent="Could not load content. Check config and README files."}}
+ try{await({home,scorecard,about,project:()=>project(h[1])}[r])()}catch(e){$("app").textContent="Could not load content. Check config and page files."}}
 addEventListener("hashchange",route);route();
 </script></body></html>
